@@ -4,6 +4,8 @@ export interface IClient extends Document {
   name: string;
   email: string;
   phone?: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const clientSchema = new Schema<IClient>(
