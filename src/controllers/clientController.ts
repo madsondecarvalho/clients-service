@@ -10,6 +10,9 @@ import { clientSchema } from '../validators/clientSchema';
 import { RedisService } from '../services/RedisService';
 import { AppLogger } from '../logger/AppLogger';
 
+
+const kafkaBrokers = (process.env.KAFKA_BROKERS || 'kafka:9092').split(',');
+
 //logger for dependency injection
 const logger = new AppLogger();
 
@@ -17,7 +20,7 @@ const logger = new AppLogger();
 const redisService = new RedisService(logger);
 
 //kafka event publisher for dependency injection
-const eventPublisher: KafkaEventPublisher = new KafkaEventPublisher(['localhost:9092']);
+const eventPublisher: KafkaEventPublisher = new KafkaEventPublisher(kafkaBrokers);
 
 //repositories and use cases for dependency injection
 const clientRepo = new ClientRepositoryImpl();

@@ -4,10 +4,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node src/index.ts",
-    "dev:consumer": "ts-node consumer.ts",
+    "dev:consumer": "ts-node src/onsumer.ts",
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:consumer\"",
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start:api": "node dist/index.js",
+    "start:consumer": "node dist/consumer.js"
   },
   "keywords": [],
   "author": "",

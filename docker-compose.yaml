@@ -17,8 +17,8 @@ services:
     restart: unless-stopped
     environment:
       KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
       KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka:9092"
       KAFKA_BROKER_ID: "1"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
@@ -43,6 +43,32 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
+
+  api:
+    build: .
+    command: sh -c "npx wait-on tcp:kafka:9092 && npm run start:api"
+    depends_on:
+      - mongodb
+      - kafka
+      - redis
+    environment:
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+
+  consumer:
+    build: .
+    command: sh -c "npx wait-on tcp:kafka:9092 && npm run start:consumer"
+    depends_on:
+      - mongodb
+      - kafka
+      - redis
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
 
 volumes:
   mongo-data:
