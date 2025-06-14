@@ -7,8 +7,10 @@ import { DeleteClientUseCase } from '../usecases/client/deleteClient';
 import { CreateClientMessageUseCase } from '../usecases/client/createClientMessage';
 import { KafkaEventPublisher } from '../services/KafkaEventPublisher';
 import { clientSchema } from '../validators/clientSchema';
-import { redisService } from '../services/RedisService';
+import { RedisService } from '../services/RedisService';
+import { AppLogger } from '../logger/AppLogger';
 
+const redisService = new RedisService(new AppLogger());
 
 const eventPublisher : KafkaEventPublisher = new KafkaEventPublisher(['localhost:9092']);
 

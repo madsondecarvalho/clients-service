@@ -4,9 +4,11 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db';
 import clientRoutes from './routes/clientRoutes';
-import { redisService } from './services/RedisService';
+import { AppLogger } from './logger/AppLogger';
 import { requestLogger } from './middlewares/requestLogger';
+import { RedisService } from './services/RedisService';
 
+const redisService = new RedisService(new AppLogger());
 
 dotenv.config();
 const app = express();
@@ -18,6 +20,10 @@ app.use(express.json());
 
 // conectar ao Mongo
 connectDB();
+
+//adding request logger
+const logger = new AppLogger();
+app.use(requestLogger(logger));
 
 redisService
   .set('healthcheck', 'ok', 10)
@@ -33,9 +39,6 @@ redisService
     console.error('❌ Erro ao conectar ao Redis:', err);
   });
 
-
-//adicionar logger de requisições
-app.use(requestLogger);
 
 // rotas
 app.use('/api', clientRoutes);
