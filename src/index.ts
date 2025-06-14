@@ -1,11 +1,11 @@
+import 'dotenv/config';
 import express, { ErrorRequestHandler } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db';
 import clientRoutes from './routes/clientRoutes';
 import { redisService } from './services/RedisService';
-
-import 'dotenv/config';
+import { requestLogger } from './middlewares/requestLogger';
 
 
 dotenv.config();
@@ -33,6 +33,9 @@ redisService
     console.error('❌ Erro ao conectar ao Redis:', err);
   });
 
+
+//adicionar logger de requisições
+app.use(requestLogger);
 
 // rotas
 app.use('/api', clientRoutes);

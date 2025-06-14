@@ -1,4 +1,5 @@
 import { Kafka, Consumer } from 'kafkajs';
+import logger from '../utils/logger';
 
 export class KafkaEventConsumer {
   private consumer: Consumer;
@@ -9,15 +10,26 @@ export class KafkaEventConsumer {
   }
 
   async consume(topic: string, handler: (message: any) => Promise<void>) {
-    await this.consumer.connect();
-    await this.consumer.subscribe({ topic, fromBeginning: true });
+    try {
+      await this.consumer.connect();
+      logger.info(`Kafka consumer connected to the broker`);
 
-    await this.consumer.run({
-      eachMessage: async ({ message }) => {
-        if (message.value) {
-          await handler(JSON.parse(message.value.toString()));
-        }
-      },
-    });
+      await this.consumer.subscribe({ topic, fromBeginning: true });
+      logger.info(`Subscribed to topic: ${topic}`);
+
+      await this.consumer.run({
+        eachMessage: async ({ message, partition }) => {
+          if (message.value) {
+            logger.info(
+              `Received message on topic ${topic} (partition ${partition})`
+            );
+            await handler(JSON.parse(message.value.toString()));
+          }
+        },
+      });
+    } catch (error) {
+      logger.error('Kafka consumer error: %o', error);
+      throw error;
+    }
   }
 }
