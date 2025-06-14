@@ -134,6 +134,55 @@ KAFKA_TOPIC=CREATE_CLIENT
 
 ---
 
+## Testes com Postman
+
+Além dos exemplos com `curl`, você pode importar a collection pronta do Postman para testar todos os endpoints rapidamente.
+
+O arquivo da collection está em:
+
+```
+client-service.postman_collection.json
+```
+
+Basta importar esse arquivo no Postman para ter acesso a todos os endpoints e exemplos de requisição já configurados.
+
+### Criar cliente
+```sh
+curl --location 'http://localhost:3000/api/client' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "teste da silva",
+    "email": "test.1233525@example.com",
+    "phone": "(84) 12312-0000"
+}'
+```
+
+### Listar todos os clientes
+```sh
+curl --location 'http://localhost:3000/api/client'
+```
+
+### Buscar cliente por ID
+```sh
+curl --location 'http://localhost:3000/api/client/684dc73d7e8c1cbb77eb9ca7'
+```
+
+### Atualizar cliente
+```sh
+curl --location --request PUT 'http://localhost:3000/api/client/684dc73d7e8c1cbb77eb9ca7' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "João Atualizado",
+    "email": "joao.test1231233@example.com",
+    "phone": "(84) 98888-1111"
+}'
+```
+
+### Remover cliente
+```sh
+curl --location --request DELETE 'http://localhost:3000/api/client/684dcf3fda3e6f3cec6abe77'
+```
+
 ## Dúvidas?
 
 Abra uma issue ou consulte os comentários no código para mais detalhes!

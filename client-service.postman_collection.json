@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "acd351a1-c00e-45e8-a112-cbf66ef40de5",
+		"name": "client-service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12366519"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/api/client",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"João Silva\",\"email\":\"joao.silva@example.com\",\"phone\":\"(84) 99999-0000\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/client",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"client"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:3000/api/client \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\"name\":\"João Silva\",\"email\":\"joao.silva@example.com\",\"phone\":\"(84) 99999-0000\"}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/client",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/client",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"client"
+					]
+				},
+				"description": "Generated from cURL: curl http://localhost:3000/api/client\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/client/<ID>",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/client/<ID>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"client",
+						"<ID>"
+					]
+				},
+				"description": "Generated from cURL: curl http://localhost:3000/api/client/<ID>\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/client/<ID>",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\":\"João Atualizado\",\"email\":\"joao.atual@example.com\",\"phone\":\"(84) 98888-1111\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/client/<ID>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"client",
+						"<ID>"
+					]
+				},
+				"description": "Generated from cURL: curl -X PUT http://localhost:3000/api/client/<ID> \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\"name\":\"João Atualizado\",\"email\":\"joao.atual@example.com\",\"phone\":\"(84) 98888-1111\"}'"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/api/client/<ID>",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/client/<ID>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"client",
+						"<ID>"
+					]
+				},
+				"description": "Generated from cURL: curl -X DELETE http://localhost:3000/api/client/<ID>\r\n"
+			},
+			"response": []
+		}
+	]
+}
