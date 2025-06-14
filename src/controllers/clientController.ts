@@ -6,6 +6,8 @@ import { UpdateClientUseCase } from '../usecases/client/updateClient';
 import { DeleteClientUseCase } from '../usecases/client/deleteClient';
 import { CreateClientMessageUseCase } from '../usecases/client/createClientMessage';
 import { KafkaEventPublisher } from '../services/KafkaEventPublisher';
+import { clientSchema } from '../validators/clientSchema';
+
 
 const eventPublisher : KafkaEventPublisher = new KafkaEventPublisher(['localhost:9092']);
 
@@ -18,7 +20,14 @@ const createClientMessageUseCase = new CreateClientMessageUseCase(eventPublisher
 
 export const createClient: RequestHandler = async (req, res) => {
   try {
-    const client = req.body; //TODO ADICIONAR VALIDAÇÃO
+    const parseResult = clientSchema.safeParse(req.body);
+
+    if (!parseResult.success) {
+      res.status(400).json({ message: "Validation Error", data: parseResult.error.errors });
+      return;
+    }
+
+    const client = parseResult.data;
 
     const createClientMessage = await createClientMessageUseCase.execute(client)
 
@@ -40,10 +49,12 @@ export const getAllClients: RequestHandler = async (_req, res) => {
 export const getClientById: RequestHandler = async (req, res) => {
   try {
     const client = await getClientByIdUseCase.execute(req.params.id);
+    
     if (!client) {
       res.status(404).json({ error: 'Client não encontrado' });
       return;
     }
+    
     res.json(client);
   } catch {
     res.status(400).json({ error: 'ID inválido' });
@@ -52,6 +63,13 @@ export const getClientById: RequestHandler = async (req, res) => {
 
 export const updateClient: RequestHandler = async (req, res) => {
   try {
+    const parseResult = clientSchema.safeParse(req.body);
+
+    if (!parseResult.success) {
+      res.status(400).json({ message: "Validation Error", data: parseResult.error.errors });
+      return;
+    }
+
     const client = await updateClientUseCase.execute(req.params.id, req.body);
     if (!client) {
       res.status(404).json({ error: 'Client não encontrado' });

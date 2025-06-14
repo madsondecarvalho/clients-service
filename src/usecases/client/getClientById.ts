@@ -1,4 +1,3 @@
-// src/usecases/client/getClientById.ts
 import { Client } from '../../entities/Client';
 import { ClientRepository } from '../../repositories/ClientRepository';
 
