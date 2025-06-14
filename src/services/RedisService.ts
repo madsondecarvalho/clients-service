@@ -1,6 +1,6 @@
 import Redis from 'ioredis';
 
-class RedisService {
+export class RedisService {
   private client: Redis;
 
   constructor() {

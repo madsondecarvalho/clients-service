@@ -7,13 +7,14 @@ import { DeleteClientUseCase } from '../usecases/client/deleteClient';
 import { CreateClientMessageUseCase } from '../usecases/client/createClientMessage';
 import { KafkaEventPublisher } from '../services/KafkaEventPublisher';
 import { clientSchema } from '../validators/clientSchema';
+import { redisService } from '../services/RedisService';
 
 
 const eventPublisher : KafkaEventPublisher = new KafkaEventPublisher(['localhost:9092']);
 
 const clientRepo = new ClientRepositoryImpl();
 const getAllClientsUseCase = new GetAllClientsUseCase(clientRepo);
-const getClientByIdUseCase = new GetClientByIdUseCase(clientRepo);
+const getClientByIdUseCase = new GetClientByIdUseCase(clientRepo, redisService);
 const updateClientUseCase = new UpdateClientUseCase(clientRepo);
 const deleteClientUseCase = new DeleteClientUseCase(clientRepo);
 const createClientMessageUseCase = new CreateClientMessageUseCase(eventPublisher, clientRepo);
