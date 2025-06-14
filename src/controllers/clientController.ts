@@ -1,4 +1,4 @@
-import { RequestHandler   } from 'express';
+import { RequestHandler } from 'express';
 import { ClientRepositoryImpl } from '../data/ClientRepositoryImpl';
 import { GetAllClientsUseCase } from '../usecases/client/getAllClients';
 import { GetClientByIdUseCase } from '../usecases/client/getClientById';
@@ -10,16 +10,24 @@ import { clientSchema } from '../validators/clientSchema';
 import { RedisService } from '../services/RedisService';
 import { AppLogger } from '../logger/AppLogger';
 
-const redisService = new RedisService(new AppLogger());
+//logger for dependency injection
+const logger = new AppLogger();
 
-const eventPublisher : KafkaEventPublisher = new KafkaEventPublisher(['localhost:9092']);
+//redis for dependency injection
+const redisService = new RedisService(logger);
 
+//kafka event publisher for dependency injection
+const eventPublisher: KafkaEventPublisher = new KafkaEventPublisher(['localhost:9092']);
+
+//repositories and use cases for dependency injection
 const clientRepo = new ClientRepositoryImpl();
-const getAllClientsUseCase = new GetAllClientsUseCase(clientRepo);
-const getClientByIdUseCase = new GetClientByIdUseCase(clientRepo, redisService);
-const updateClientUseCase = new UpdateClientUseCase(clientRepo);
-const deleteClientUseCase = new DeleteClientUseCase(clientRepo);
-const createClientMessageUseCase = new CreateClientMessageUseCase(eventPublisher, clientRepo);
+
+// Use cases
+const getAllClientsUseCase = new GetAllClientsUseCase(clientRepo, logger);
+const getClientByIdUseCase = new GetClientByIdUseCase(clientRepo, redisService, logger);
+const updateClientUseCase = new UpdateClientUseCase(clientRepo, logger);
+const deleteClientUseCase = new DeleteClientUseCase(clientRepo, logger);
+const createClientMessageUseCase = new CreateClientMessageUseCase(eventPublisher, clientRepo, logger);
 
 export const createClient: RequestHandler = async (req, res) => {
   try {
@@ -52,12 +60,12 @@ export const getAllClients: RequestHandler = async (_req, res) => {
 export const getClientById: RequestHandler = async (req, res) => {
   try {
     const client = await getClientByIdUseCase.execute(req.params.id);
-    
+
     if (!client) {
       res.status(404).json({ error: 'Client não encontrado' });
       return;
     }
-    
+
     res.json(client);
   } catch {
     res.status(400).json({ error: 'ID inválido' });
