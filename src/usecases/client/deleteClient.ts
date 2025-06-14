@@ -1,9 +1,11 @@
 import { ClientRepository } from '../../repositories/ClientRepository';
 import { Logger } from '../../logger/LoggerInterface';
+import { RedisService } from '../../services/RedisService';
 
 export class DeleteClientUseCase {
   constructor(
     private clientRepo: ClientRepository,
+    private redis: RedisService,
     private logger: Logger
   ) {}
 
@@ -13,6 +15,9 @@ export class DeleteClientUseCase {
       const result = await this.clientRepo.delete(id);
       if (result) {
         this.logger.info(`Client with id ${id} deleted successfully`);
+
+        this.redis.del(`client:${id}`);
+        this.redis.del('clients'); 
       } else {
         this.logger.warn(`Client with id ${id} not found`);
       }

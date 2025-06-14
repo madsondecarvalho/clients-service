@@ -10,7 +10,6 @@ import { clientSchema } from '../validators/clientSchema';
 import { RedisService } from '../services/RedisService';
 import { AppLogger } from '../logger/AppLogger';
 
-
 const kafkaBrokers = (process.env.KAFKA_BROKERS || 'kafka:9092').split(',');
 
 //logger for dependency injection
@@ -26,10 +25,11 @@ const eventPublisher: KafkaEventPublisher = new KafkaEventPublisher(kafkaBrokers
 const clientRepo = new ClientRepositoryImpl();
 
 // Use cases
-const getAllClientsUseCase = new GetAllClientsUseCase(clientRepo, logger);
+const getAllClientsUseCase = new GetAllClientsUseCase(clientRepo, redisService, logger);
 const getClientByIdUseCase = new GetClientByIdUseCase(clientRepo, redisService, logger);
-const updateClientUseCase = new UpdateClientUseCase(clientRepo, logger);
-const deleteClientUseCase = new DeleteClientUseCase(clientRepo, logger);
+const updateClientUseCase = new UpdateClientUseCase(clientRepo, redisService, logger);
+const deleteClientUseCase = new DeleteClientUseCase(clientRepo, redisService, logger);
+
 const createClientMessageUseCase = new CreateClientMessageUseCase(eventPublisher, clientRepo, logger);
 
 export const createClient: RequestHandler = async (req, res) => {

@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node src/index.ts",
-    "dev:consumer": "ts-node src/onsumer.ts",
+    "dev:api": "nodemon --legacy-watch --watch src --ext ts --exec ts-node src/index.ts",
+    "dev:consumer": "nodemon --legacy-watch --watch src --ext ts --exec ts-node src/consumer.ts",
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:consumer\"",
     "build": "tsc",
     "start:api": "node dist/index.js",

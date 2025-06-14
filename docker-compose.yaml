@@ -46,13 +46,15 @@ services:
 
   api:
     build: .
-    command: sh -c "npx wait-on tcp:kafka:9092 && npm run start:api"
+    volumes:
+      - .:/app
+    command: sh -c "npx wait-on tcp:kafka:9092 && npm run dev:api"
     depends_on:
       - mongodb
       - kafka
       - redis
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
     ports:
       - "3000:3000"
     env_file:
@@ -60,13 +62,15 @@ services:
 
   consumer:
     build: .
-    command: sh -c "npx wait-on tcp:kafka:9092 && npm run start:consumer"
+    volumes:
+      - .:/app
+    command: sh -c "npx wait-on tcp:kafka:9092 && npm run dev:consumer"
     depends_on:
       - mongodb
       - kafka
       - redis
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
     env_file:
       - .env
 
