@@ -1,4 +1,3 @@
-// src/usecases/client/deleteClient.ts
 import { ClientRepository } from '../../repositories/ClientRepository';
 
 export class DeleteClientUseCase {

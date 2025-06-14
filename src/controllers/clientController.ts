@@ -4,6 +4,7 @@ import { GetAllClientsUseCase } from '../usecases/client/getAllClients';
 import { GetClientByIdUseCase } from '../usecases/client/getClientById';
 import { UpdateClientUseCase } from '../usecases/client/updateClient';
 import { DeleteClientUseCase } from '../usecases/client/deleteClient';
+import { CreateClientMessageUseCase } from '../usecases/client/createClientMessage';
 import { KafkaEventPublisher } from '../services/KafkaEventPublisher';
 
 const eventPublisher : KafkaEventPublisher = new KafkaEventPublisher(['localhost:9092']);
@@ -13,14 +14,15 @@ const getAllClientsUseCase = new GetAllClientsUseCase(clientRepo);
 const getClientByIdUseCase = new GetClientByIdUseCase(clientRepo);
 const updateClientUseCase = new UpdateClientUseCase(clientRepo);
 const deleteClientUseCase = new DeleteClientUseCase(clientRepo);
+const createClientMessageUseCase = new CreateClientMessageUseCase(eventPublisher, clientRepo);
 
 export const createClient: RequestHandler = async (req, res) => {
   try {
     const client = req.body; //TODO ADICIONAR VALIDAÇÃO
 
-    await eventPublisher.publish('CREATE_CLIENT', client);
+    const createClientMessage = await createClientMessageUseCase.execute(client)
 
-    res.status(201).json({message: 'O cliente será criado. ', client});
+    res.status(201).json(createClientMessage);
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message });

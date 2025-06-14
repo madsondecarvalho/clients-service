@@ -3,7 +3,7 @@ import { KafkaEventConsumer } from './src/services/KafkaEventConsumer';
 import { handleCreateClient } from './src/consumers/createClientConsumer';
 
 async function bootstrap() {
-    await mongoose.connect('mongodb://localhost:27017/seubanco'); // ajuste para seu banco
+    await mongoose.connect('mongodb://localhost:27017/clients-service'); // ajuste para seu banco
     console.log('✅MongoDB conectado');
 
     const kafkaConsumer = new KafkaEventConsumer(['localhost:9092'], 'create-client-group');

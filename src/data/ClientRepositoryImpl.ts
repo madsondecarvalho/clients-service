@@ -1,7 +1,9 @@
-// src/data/ClientRepositoryImpl.ts
 import { ClientRepository } from '../repositories/ClientRepository';
 import { Client } from '../entities/Client';
 import { IClient, Client as ClientModel } from '../models/client';
+import { HydratedDocument } from 'mongoose';
+
+export type ClientDocument = HydratedDocument<IClient>;
 
 export class ClientRepositoryImpl implements ClientRepository {
   async create(data: Partial<Client>): Promise<Client> {
@@ -15,8 +17,9 @@ export class ClientRepositoryImpl implements ClientRepository {
     return this.mapDocToEntity(doc);
   }
 
-  async findAll(): Promise<Client[]> {
-    const docs = await ClientModel.find();
+  async find(): Promise<Client[]> {
+    const docs = await ClientModel.find({});
+
     return docs.map(doc => this.mapDocToEntity(doc));
   }
 
@@ -43,9 +46,9 @@ export class ClientRepositoryImpl implements ClientRepository {
     return this.mapDocToEntity(doc);
   }
 
-  private mapDocToEntity(doc: IClient): Client {
+  private mapDocToEntity(doc: ClientDocument): Client {
     return new Client({
-      id: doc.id.toString(),
+      id: (doc._id as string),
       name: doc.name,
       email: doc.email,
       phone: doc.phone,
